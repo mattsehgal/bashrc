@@ -256,12 +256,12 @@ scripts_dir="$tools_dir/terminal-scripts"
 # Source every regular file in the terminal scripts dir
 if [[ -d "$scripts_dir" ]]; then
     echo "scripts:"
-    local i=0
+    i=0
     while IFS= read -r f; do
         [[ -n "$f" ]] || continue
         filename="${f##*/}"
         source "$f"
-        local pattern="*~*~*~*|"
+        pattern="*~*~*~*|"
         if [[ $i == 1 ]]; then
             pattern="~*~*~*~|"
             i=0
