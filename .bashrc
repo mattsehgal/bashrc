@@ -253,7 +253,7 @@ function nightlight() {
 tools_dir="$func_root/tools"
 scripts_dir="$tools_dir/terminal-scripts"
 
-# Source every regular file in the startup scripts dir
+# Source every regular file in the terminal scripts dir
 if [[ -d "$scripts_dir" ]]; then
     echo "scripts:"
     local i=0
