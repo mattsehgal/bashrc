@@ -17,21 +17,25 @@ function reload() {
 function _edit() {
     local editor="$1"
     shift
-    local target="${1:-$bashrc}"
-    $editor $target
+
+    if [[ $# -eq 0 ]]; then
+        "$editor" "$bashrc"
+    else
+        "$editor" "$@"
+    fi
 }
 
 alias edit='editc'
 function editc() {
-    _edit code $@
+    _edit code "$@";
 }
 
 function editn() {
-    _edit nano $@
+    _edit nano "$@";
 }
 
 function editv() {
-    _edit vi $@
+    _edit vi "$@";
 }
 ########################
 
@@ -101,6 +105,11 @@ function gp() {
 function grao() {
     # git remote add origin <repo-url>
     git remote add origin $*
+}
+
+function grsu() {
+    # git remote set-url origin git@github.com/<user>/<repo>.git
+    git remote set-url origin git@github.com/$*
 }
 #######################
 
