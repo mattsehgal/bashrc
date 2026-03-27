@@ -108,6 +108,7 @@ function handle_at() {
 }
 
 func_root=$root/Developer
+# Windows: func_root=$root/tmp
 
 function home() {
     handle_at "$root" "$@"

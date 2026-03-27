@@ -1,4 +1,5 @@
-#!/usr/bin/env bash
+# Convert MacOS keyboard to work for Dota 2, enable Fn keys + swap cmd/opt keys.
+
 if [[ "${BASH_SOURCE[0]:-}" == "$0" ]]; then
   set -euo pipefail
 fi

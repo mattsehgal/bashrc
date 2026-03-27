@@ -1,4 +1,7 @@
+# Terminal Prompt Configuration (info + colors)
+
 # Import Apple git prompt
+# TODO: Windows compatible
 _git_prompt_sh="/Library/Developer/CommandLineTools/usr/share/git-core/git-prompt.sh"
 [[ -f "$_git_prompt_sh" ]] && source "$_git_prompt_sh"
 
