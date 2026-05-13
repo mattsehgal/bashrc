@@ -24,11 +24,12 @@ function touch_ls() {
     ls -al
 }
 
+alias mk='touch'
 alias nf='new_file'
 function new_file() {
     local file="$1"
-    touch $file
-    code $file
+    touch "$file"
+    code "$file"
 }
 
 alias rn='rename'
@@ -39,6 +40,7 @@ function rename() {
     mv "$dir/$old_name" "$dir/$new_name"
 }
 
+alias mkd='mkdir'
 alias mkcd='mkdir_cd'
 function mkdir_cd() {
     local dir="$1"
@@ -83,9 +85,21 @@ function rm_in() {
 }
 
 function @() {
+	local query="$1"
 	local dir
 	for depth in {1..3}; do
-		dir=$(find . -maxdepth $depth -type d -iname "*$1*" | head -n 1)
+		# 1. exact (case-insensitive) name match
+		dir=$(find . -maxdepth $depth -type d -iname "$query" 2>/dev/null | head -n 1)
+		# 2. prefix match, shortest basename wins
+		if [[ -z $dir ]]; then
+			dir=$(find . -maxdepth $depth -type d -iname "$query*" 2>/dev/null \
+				| awk '{ print length($0), $0 }' | sort -n | head -n 1 | cut -d' ' -f2-)
+		fi
+		# 3. substring match, shortest basename wins
+		if [[ -z $dir ]]; then
+			dir=$(find . -maxdepth $depth -type d -iname "*$query*" 2>/dev/null \
+				| awk '{ print length($0), $0 }' | sort -n | head -n 1 | cut -d' ' -f2-)
+		fi
 		if [[ -n $dir ]]; then
 			echo "switching to: $dir"
 			cd "$dir" || return
@@ -118,6 +132,11 @@ function root() {
     handle_at "$func_root" "$@"
 }
 
+alias ag='agents'
+function agents() {
+    handle_at "$func_root/agents" "$@"
+}
+
 alias rls='release'
 function release() {
     handle_at "$func_root/release" "$@"
@@ -128,7 +147,17 @@ function tools() {
     handle_at "$tools_dir" "$@"
 }
 
+alias bp='bash_private'
+function bash_private() {
+    handle_at "$private_dir" "$@"
+}
+
 alias ws='workspace'
 function workspace() {
     handle_at "$func_root/workspace" "$@"
+}
+
+alias sd='steamdeck'
+function steamdeck() {
+    handle_at "$func_root/steamdeck" "$@"
 }

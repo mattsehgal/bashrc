@@ -1,5 +1,9 @@
 # Git Functions & Shortcuts
 
+# Skip the merge-message editor on `git pull` non-fast-forward merges.
+# (`core.mergeoptions = --no-edit` in ~/.gitconfig isn't honored by `git pull`.)
+export GIT_MERGE_AUTOEDIT=no
+
 function gs() {
     # git status
     git status
@@ -7,7 +11,11 @@ function gs() {
 
 function ga() {
     # git add
-    git add .
+    if [[ $# -gt 0 ]]; then
+        git add "$@"
+    else
+        git add .
+    fi
 }
 
 function gas() {
@@ -16,9 +24,18 @@ function gas() {
     git status
 }
 
+function gd() {
+    # git diff
+    git diff
+}
+
 function grs() {
     # git restore --staged <file-name ... >
-    git restore --staged $*
+    if [[ $# -gt 0 ]]; then
+        git restore --staged "$@"
+    else
+        git restore --staged .
+    fi
     git status
 }
 
@@ -72,3 +89,11 @@ function grsu() {
     # git remote set-url origin git@github.com/<user>/<repo>.git
     git remote set-url origin git@github.com/$*
 }
+
+# Branch name completion for git shortcut functions
+function _git_branch_completions() {
+    local branches
+    branches=$(git branch --format='%(refname:short)' 2>/dev/null)
+    COMPREPLY=($(compgen -W "$branches" -- "${COMP_WORDS[COMP_CWORD]}"))
+}
+complete -F _git_branch_completions gcb gdb gpo
